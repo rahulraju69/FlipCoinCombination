@@ -1,6 +1,8 @@
 #!/bin/bash -x
 
 declare -A dictionary
+declare -a valueArray
+declare -a keyArray
 dictionary[HHH]=0
 dictionary[HHT]=0
 dictionary[HTH]=0
@@ -9,50 +11,81 @@ dictionary[HTT]=0
 dictionary[THT]=0
 dictionary[TTH]=0
 dictionary[TTT]=0
+dictionary[HH]=0
+dictionary[HT]=0
+dictionary[TH]=0
+dictionary[TT]=0
+dictionary[H]=0
+dictionary[T]=0
 
-for ((i=0;i<20; i++))
+for (( i=0 ; i<30 ; i++ ))
 do
-	flipCoin1=$((RANDOM%2))
-	flipCoin2=$((RANDOM%2))
-	flipCoin3=$((RANDOM%2))
-case $flipCoin1$flipCoin2$flipCoin3 in
-	000)
-		((dictionary[HHH]++))
-		;;
-	001)
-
-		((dictionary[HHT]++))
-		;;
-	010)
-		((dictionary[HTH]++))
-		;;
-
-	100)
-		((dictionary[THH]++))
-		;;
-	011)
-		((dictionary[HTT]++))
-                ;;
-	101)
-		((dictionary[THT]++))
-                ;;
-	110)
-		((dictionary[TTH]++))
-                ;;
-
-	111)
-		((dictionary[TTT]++))
-                ;;
-
-esac
+	coinFlip=$((RANDOM%14))
+	case $coinFlip in
+		0)
+			((dictionary[HHH]++))
+			;;
+		1)
+			((dictionary[HHT]++))
+			;;
+		2)
+			((dictionary[HTH]++))
+			;;
+		3)
+			((dictionary[THH]++))
+			;;
+		4)
+			((dictionary[HTT]++))
+			;;
+		5)
+			((dictionary[THT]++))
+			;;
+		6)
+			((dictionary[TTH]++))
+			;;
+		7)
+			((dictionary[TTT]++))
+			;;
+		8)
+			((dictionary[HH]++))
+			;;
+		9)
+			((dictionary[HT]++))
+			;;
+		10)
+			((dictionary[TH]++))
+			;;
+		11)
+			((dictionary[TT]++))
+			;;
+		12)
+			((dictionary[H]++))
+			;;
+		13)
+			((dictionary[T]++))
+			;;
+	esac
 done
-echo "the percentage of HHH is $((${dictionary[HHH]}*100/20))"
-echo "the percentage of HHT is $((${dictionary[HHT]}*100/20))"
-echo "the percentage of HTH is $((${dictionary[HTH]}*100/20))"
-echo "the percentage of THH is $((${dictionary[THH]}*100/20))"
-echo "the percentage of HTT is $((${dictionary[HTT]}*100/20))"
-echo "the percentage of THT is $((${dictionary[THT]}*100/20))"
-echo "the percentage of TTH is $((${dictionary[TTH]}*100/20))"
-echo "the percentage of TTT is $((${dictionary[TTT]}*100/20))"
-
-
+i=0
+for value in `echo ${dictionary[@]}`
+do
+	valueArray[$i]=$value
+	((i++))
+done
+i=0
+for key in `echo ${!dictionary[@]}`
+do
+	keyArray[$i]=$key
+	((i++))
+done
+max=0
+maxCounter=0
+for (( counter=0 ; counter<14 ; counter++ ))
+do
+	if [ ${valueArray[$counter]} -gt $max ]
+	then
+		max=${valueArray[counter]}
+		maxCounter=$counter
+	fi
+done
+echo "The winning combination is ${keyArray[$maxCounter]} and it occured ${valueArray[$maxCounter]} times"
